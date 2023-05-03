@@ -10,18 +10,18 @@ Using:
 tensorflow 1.14.0
 gym 0.15.3
 """
-
+import math
 
 import numpy as np
+from keras.optimizers import SGD
+from tensorflow.compat.v2.keras.optimizers import Adam
 import tensorflow.compat.v1 as tf
 import logging
-from tensorflow.keras import Model
-from tensorflow.keras.layers import Dense, Input
-from tensorflow.keras.optimizers import Adam
+
 from sklearn.model_selection import train_test_split
 
-# TODO: linux·ÖÖ§ÒªÈ¥³ý
-# tf.compat.v1.disable_eager_execution()
+# TODO: linuxï¿½ï¿½Ö§ÒªÈ¥ï¿½ï¿½
+tf.compat.v1.disable_eager_execution()
 np.random.seed(1)
 
 #####################  hyper parameters  ####################
@@ -46,12 +46,11 @@ OUTPUT_GRAPH = False
 ###############################  DDPG  ####################################
 class DDPG(object):
     def __init__(self, a_dim, s_dim, a_bound, auto_model):
-        self.memory = np.zeros((MEMORY_CAPACITY, s_dim * 2 + a_dim + 1), dtype=np.float32)  # memoryÀï´æ·Åµ±Ç°ºÍÏÂÒ»¸östate£¬¶¯×÷ºÍ½±Àø
+        self.memory = np.zeros((MEMORY_CAPACITY, s_dim * 2 + a_dim + 1), dtype=np.float32)  # memoryï¿½ï¿½ï¿½Åµï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½stateï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í½ï¿½ï¿½ï¿½
         self.pointer = 0
         self.sess = tf.Session()
-
         self.a_dim, self.s_dim, self.a_bound = a_dim, s_dim, a_bound,
-        self.S = tf.placeholder(tf.float32, [None, s_dim], 's')  # ÊäÈë
+        self.S = tf.placeholder(tf.float32, [None, s_dim], 's')  # ï¿½ï¿½ï¿½ï¿½
         self.S_ = tf.placeholder(tf.float32, [None, s_dim], 's_')
         self.R = tf.placeholder(tf.float32, [None, 1], 'r')
         self.auto_model = auto_model
@@ -100,8 +99,20 @@ class DDPG(object):
         f1.close()
 
     def choose_action(self, s):
-        temp = self.sess.run(self.a, {self.S: s[np.newaxis, :]})
-        return temp[0]
+
+        temp_action = self.sess.run(self.a, {self.S: s[np.newaxis, :]})
+        list_arr = list(temp_action[0])
+        epsilon = 0.99
+        if np.random.uniform() < epsilon:
+            device_index = (math.ceil(list_arr[0] * 1000) % self.a_bound)+ 1
+        else:
+            device_index = np.random.randint(0, self.a_bound) + 1
+        bandwidth = (math.ceil(list_arr[1] * 1000) % 9) + 1
+        waitTime = (math.ceil(list_arr[2] * 1000) % 9) + 1
+        # self.epsilon = self.epsilon + self.epsilon_increment if self.epsilon < self.epsilon_max else self.epsilon_max
+        return device_index, bandwidth, waitTime, temp_action[0]
+
+
 
     def learn(self):
         self.sess.run(self.soft_replace)
@@ -113,21 +124,11 @@ class DDPG(object):
         br = bt[:, -self.s_dim - 1: -self.s_dim]
         bs_ = bt[:, -self.s_dim:]
 
-        bs_ba = np.concatenate((bs, ba), axis=1)
-        br_bs_ = np.concatenate((br, bs_), axis=1)
-
-        # Split the dataset into training and validation sets
-        bs_ba_train, bs_ba_val, br_bs_train, br_bs_val = train_test_split(bs_ba, br_bs_, test_size=0.2, random_state=42)
-
-        self.auto_model.compile(optimizer=Adam(learning_rate=0.001), loss='mse')
-        epochs = 100
-        batch_size = 64
-        self.auto_model.fit(bs_ba_train, br_bs_train, epochs=epochs, batch_size=batch_size, validation_data=(bs_ba_val, br_bs_val))
-
         a_cost = self.sess.run(self.atrain, {self.S: bs})
         self.a_cost.append(a_cost)
         c_cost = self.sess.run(self.ctrain, {self.S: bs, self.a: ba, self.R: br, self.S_: bs_})
         self.c_cost.append(c_cost)
+        return bs, ba,br, bs_
 
     def store_transition(self, s, a, r, s_):
         transition = np.hstack((s, a, [r], s_))
@@ -163,11 +164,14 @@ class DDPG(object):
         now = "DDPGTO"
         # time.strftime("%Y-%m-%d-%H_%M_%S",time.localtime(time.time()))
         fname="models/"+now+".ckpt"
-        auto_name = "DTmodels/"+now+".h5"
-        self.auto_model.save_weights(auto_name)
-        # fname = "baselinemodels/DRLTOmodel.ckpt"
         save_path = saver.save(self.sess, fname)
         print("Save to path: ", save_path)
+
+    # def save_digital_model(self):
+    #     now = "DDPGTO"
+    #     auto_name = "DTmodels/"+now+".h5"
+    #     self.auto_model.save_weights(auto_name)
+    #     print("Save to path(digital twin): ", auto_name)
 
     def restore_net(self):
         saver = tf.train.Saver()

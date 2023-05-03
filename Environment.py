@@ -5,6 +5,7 @@ import networkx as nx
 import pandas as pd
 
 from EdgeDevice import EdgeDevice
+from EdgeDevice import EdgeDevice
 from Task import Task
 
 import tensorflow.compat.v1 as tf
@@ -54,8 +55,8 @@ class MultiHopNetwork:
         for line in lines:
             line = line.replace('\n', '').replace('\r', '')
             info = line.split(',')
-            if len(info) == 3:
-                device = EdgeDevice(int(info[0]), int(info[1]), float(info[2]))
+            if len(info) == 4:
+                device = EdgeDevice(int(info[0]), int(info[1]), float(info[2]), float(info[3]))
                 # device.printInfo()
                 deviceList.append(device)
         f1.close()
@@ -73,7 +74,7 @@ class MultiHopNetwork:
             # if len(info) == 8:
             # print(info)
             task = Task(int(info[0]), int(info[1]), int(info[2]),
-                        int(info[3]), int(info[4]), int(info[5]))
+                        int(info[3]), int(info[4]), int(info[5]),  int(info[6]))
             # task.printInfo()
             taskList.append(task)
             if int(info[1]) in self.task_dic.keys():
@@ -119,15 +120,15 @@ class MultiHopNetwork:
     def getAverageCtime(self):
         return 0
 
-    def step(self, action_index, task, t):
+    def step(self, action, bandwidth, waitTime, task, t):
         # 在环境中对action_index进行转换
-        list_arr = list(action_index)
-
-        action = (math.ceil(list_arr[0] * 1000) % len(self.action_space)) + 1
-        print(action)
-        # action = self.action_space[action_index]
-        bandwidth = (math.ceil(list_arr[1] * 1000) % 9) + 1
-        waitTime = (math.ceil(list_arr[2] * 1000) % 9) + 1
+        # list_arr = list(action_index)
+        #
+        # action = (math.ceil(list_arr[0] * 1000) % len(self.action_space)) + 1
+        # print(action)
+        # # action = self.action_space[action_index]
+        # bandwidth = (math.ceil(list_arr[1] * 1000) % 9) + 1
+        # waitTime = (math.ceil(list_arr[2] * 1000) % 9) + 1
 
         reward, finishTime = self.update_state(action, bandwidth, waitTime, task, t)
         self.task_release_time[task.subId + task.taskId] = finishTime

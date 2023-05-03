@@ -31,7 +31,7 @@ if __name__ == '__main__':
     l2=plt.plot(x1,y2,'g--',label='LE', linewidth=width)
     l3=plt.plot(x1,y3,'b--',label='DQN+FCFS', linewidth=width)
     l4=plt.plot(x1,y4,'b^-',label='Greedy', linewidth=width)
-    l5=plt.plot(x1,y5,'ro-',label='ADPRL', linewidth=width)
+    l5=plt.plot(x1,y5,'ro-',label='DTTO', linewidth=width)
     l6=plt.plot(x1,y6,'w')
     ax=plt.gca()
     ax.spines['bottom'].set_linewidth(width)

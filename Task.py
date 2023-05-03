@@ -4,7 +4,7 @@ import numpy.random
 class Task:
     '所有子任务的基类'
 
-    def __init__(self, subId, taskId, dataSize, cload, release_time, source):
+    def __init__(self, subId, taskId, dataSize, cload, release_time, source, resource):
         self. subId=subId
         self. taskId=taskId
         self. dataSize=dataSize
@@ -13,6 +13,7 @@ class Task:
         self. source=source
         self. isAllocated = False
         self.preList = []
+        self.resource = resource
 
     # 设置前置任务list
     def setSucceList(self, taskList):
@@ -20,6 +21,9 @@ class Task:
 
     def getSucceList(self):
         return self.preList
+
+    def getResource(self):
+        return self.resource
 
     def getRank(self):
         return self.rank
