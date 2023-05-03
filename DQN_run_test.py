@@ -3,11 +3,8 @@ import sys
 
 import numpy as np
 import pandas as pd
-from gym.envs import kwargs
-from keras.optimizers import SGD
+
 from matplotlib import pyplot as plt
-from sklearn.model_selection import train_test_split
-from tensorflow import keras
 
 from AutoEncoder import AutoEncoder
 from Environment import MultiHopNetwork
@@ -70,7 +67,7 @@ def run_network(env, agent, task_num, auto_model, s_dim):
     completion_time_dic = {}
     reward_dic = {}
 
-    for episode in range(100):
+    for episode in range(1):
         # initial observation
         print("episode: ", episode)
         observation = env.reset()
@@ -338,8 +335,8 @@ if __name__ == "__main__":
     # ali_data = "Rfile/Subtask/subtask100"
     # ali_data = "file/Test/Alibaba_test_data/"
     # ali_data = "Rfile/Bandwidth_test_data"
-    task_file_path = ali_data+"task_info_5.csv"
-    task_pre_path = ali_data+"task_pre_5.csv"
+    task_file_path = ali_data+"task_info_40.csv"
+    task_pre_path = ali_data+"task_pre_40.csv"
     # network_node_path = ali_data+"/network_node_info.csv"
     # network_edge_path = ali_data+"/network_edge_info.csv"
     # device_path = ali_data+"/device_info.csv"

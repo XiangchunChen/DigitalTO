@@ -13,15 +13,11 @@ gym 0.15.3
 import math
 
 import numpy as np
-from keras.optimizers import SGD
-from tensorflow.compat.v2.keras.optimizers import Adam
-import tensorflow.compat.v1 as tf
-import logging
 
-from sklearn.model_selection import train_test_split
+import tensorflow.compat.v1 as tf
 
 # TODO: linux��֧Ҫȥ��
-tf.compat.v1.disable_eager_execution()
+# tf.compat.v1.disable_eager_execution()
 np.random.seed(1)
 
 #####################  hyper parameters  ####################

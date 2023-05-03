@@ -6,62 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="eb66e918-b295-4566-939b-0c76b36fa54a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AutoEncoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/AutoEncoder.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DDPG.py" beforeDir="false" afterPath="$PROJECT_DIR$/DDPG.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DQN_run_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/DQN_run_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DTmodels/DDPGTO.h5" beforeDir="false" afterPath="$PROJECT_DIR$/DTmodels/DDPGTO.h5" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EdgeDevice.py" beforeDir="false" afterPath="$PROJECT_DIR$/EdgeDevice.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Environment.py" beforeDir="false" afterPath="$PROJECT_DIR$/Environment.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/ComparePlot/cRtaskOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/ComparePlot/crtask.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/ComparePlot/ctask.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/ComparePlot/ctaskOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/ComparePlot/plot_or.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/ComparePlot/plot_ror.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/ComparePlot/plot_rtask.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/ComparePlot/plot_task.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/ComparePlot/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/ROPplot/plot_bandwidth.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/ROPplot/plot_rnode.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/ROPplot/plot_subtask.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/ROPplot/plot_task.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/ROPplot/rbandwidthOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/ROPplot/rnodeOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/ROPplot/rsubtaskOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/ROPplot/rtaskOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/bandwidthOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/nodeOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/plot_bandwidth.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/plot_node.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/plot_subtask.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/plot_task.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/subtaskOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/OPplot/taskOP.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/Rplot/plot_bandwidth.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plot/Rplot/plot_bandwidth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/Rplot/plot_node.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plot/Rplot/plot_node.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/Rplot/plot_subtask.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/Rplot/plot_task.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plot/Rplot/plot_task.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/Rplot/rbandwidth.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/Rplot/rnode.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/Rplot/rsubtask.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/Rplot/rtask.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/bandwidth.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/node.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/plot_bandwidth.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plot/plot_bandwidth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/plot_node.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plot/plot_node.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/plot_subtask.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/plot_task.py" beforeDir="false" afterPath="$PROJECT_DIR$/Plot/plot_task.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/rtask.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/subtask.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plot/task.pdf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_5.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_5.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_pre_5.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_pre_5.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Task.py" beforeDir="false" afterPath="$PROJECT_DIR$/Task.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file/device_info.csv" beforeDir="false" afterPath="$PROJECT_DIR$/file/device_info.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/file/now_schedule.csv" beforeDir="false" afterPath="$PROJECT_DIR$/file/now_schedule.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/DDPGTO.ckpt.data-00000-of-00001" beforeDir="false" afterPath="$PROJECT_DIR$/models/DDPGTO.ckpt.data-00000-of-00001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/DDPGTO.ckpt.index" beforeDir="false" afterPath="$PROJECT_DIR$/models/DDPGTO.ckpt.index" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/DDPGTO.ckpt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/models/DDPGTO.ckpt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_10.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_10.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_20.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_20.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_30.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_30.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_40.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Rfile/Test/Random_test_data/task_info_40.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -242,19 +192,31 @@
       <option name="presentableId" value="Default" />
       <updated>1682685089568</updated>
       <workItem from="1682685090786" duration="28340000" />
-      <workItem from="1683099432819" duration="15910000" />
+      <workItem from="1683099432819" duration="18477000" />
     </task>
+    <task id="LOCAL-00001" summary="add digital twin model">
+      <created>1683124628734</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1683124628734</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add digital twin model" />
+    <option name="LAST_COMMIT_MESSAGE" value="add digital twin model" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/DQN_run_test.py</url>
-          <line>138</line>
+          <line>135</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
@@ -275,6 +237,6 @@
     <SUITE FILE_PATH="coverage/DigitalTO$plot_node__1_.coverage" NAME="plot_node (1) Coverage Results" MODIFIED="1682934653547" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Plot/Rplot" />
     <SUITE FILE_PATH="coverage/DigitalTO$plot_bandwidth__1_.coverage" NAME="plot_bandwidth (1) Coverage Results" MODIFIED="1682934651477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Plot/Rplot" />
     <SUITE FILE_PATH="coverage/DigitalTO$plot_node.coverage" NAME="plot_node Coverage Results" MODIFIED="1682934617333" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Plot" />
-    <SUITE FILE_PATH="coverage/DigitalTO$DQN_run_test.coverage" NAME="DQN_run_test Coverage Results" MODIFIED="1683122609941" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/DigitalTO$DQN_run_test.coverage" NAME="DQN_run_test Coverage Results" MODIFIED="1683127422643" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
