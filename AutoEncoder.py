@@ -25,3 +25,19 @@ class AutoEncoder(nn.Module):
         encoded = self.encoder(x)
         decoded = self.decoder(encoded)
         return decoded
+
+# input_dim = s_dim - 1 + a_dim
+# hidden_dim = 128
+# output_dim = s_dim - 1 + 1
+# auto_model = AutoEncoder(input_dim, hidden_dim, output_dim)
+# bs_ba = np.concatenate((bs[:, 1:], ba), axis=1) # 去除time的一列
+# br_bs_ = np.concatenate((br, bs_[:, 1:]), axis=1)
+# # Convert the dataset to PyTorch tensors
+# bs_ba_tensor = torch.tensor(bs_ba, dtype=torch.float32)
+# br_bs_tensor = torch.tensor(br_bs_, dtype=torch.float32)
+# dataset = TensorDataset(bs_ba_tensor, br_bs_tensor)
+# # Train the model
+# epochs = 10
+# batch_size = 64
+# learning_rate = 0.001
+# train_autoencoder(auto_model, dataset, epochs, batch_size, learning_rate)

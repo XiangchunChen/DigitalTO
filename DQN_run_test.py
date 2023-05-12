@@ -37,19 +37,19 @@ def train_autoencoder(model, dataset, epochs, batch_size, learning_rate):
 
         print(f"Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}")
 
-def unsupervised_learning(model, bs, ba, s_dim):
-        bs_array = bs.array[1:].to_numpy()
-        bs_array = bs_array.reshape(1, len(bs_array))
-        ba = ba.reshape(1, len(ba))
-        bs_ba = np.concatenate((bs_array, ba), axis=1)
-        bs_ba_float = bs_ba.astype(np.float32)
-        # print("bs_ba.dtype:", bs_ba.dtype)
-        bs_ba_tensor = torch.tensor(bs_ba_float, dtype=torch.float32)
-        br_bs_ = model.forward(bs_ba_tensor)
-        # br_bs_ = model.forward(bs_ba)
-        br = br_bs_[:, :1]
-        bs_ = br_bs_[:, -s_dim:]
-        return br, bs_
+# Return: 下个时刻的奖励（奖励与状态有关）
+def unsupervised_learning(t_model, r_model, bs, ba, s_dim):
+    bs_array = bs.array[1:].to_numpy()
+    bs_array = bs_array.reshape(1, len(bs_array))
+    ba = ba.reshape(1, len(ba))
+    bs_ba = np.concatenate((bs_array, ba), axis=1)
+    bs_ba_float = bs_ba.astype(np.float32)
+    # print("bs_ba.dtype:", bs_ba.dtype)
+    bs_ba_tensor = torch.tensor(bs_ba_float, dtype=torch.float32)
+    bs_ = t_model.forward(bs_ba_tensor)
+    bs_ = bs_[:, -s_dim:]
+    br = r_model.forward(bs_)
+    return br, bs_
 
 # Function:检测对应时刻下的状态s中指定节点node_num是否有task t需要的resource
 # Output: 输出需要的waiting time
@@ -61,7 +61,7 @@ def check_node_state(device, s, task):
     else:
         return sys.maxsize
 
-def run_network(env, agent, task_num, auto_model, s_dim):
+def run_network(env, agent, task_num, transaction_model, reward_model, s_dim):
     step = 0
     final_action = 0
     completion_time_dic = {}
@@ -91,59 +91,64 @@ def run_network(env, agent, task_num, auto_model, s_dim):
                     # 在指定次数（指定概率）内，选择预估reward最高的action
                     max_reward = 0
                     min_wait_time = sys.maxsize - 1
-                    action_count = 1 # 选择2个动作中最优的一个
-                    target_action = None
-                    target_device_index = -1
-                    target_bandwidth = -1
-                    target_waitTime = -1
-                    temp_action = None
-                    # TODO 遇到死循环
-                    while(action_count):
-                        # Action需要满足resource constraints
-                        UnavailableFlag = True # True表示 Unavailable
-                        if episode < 0:
-                            while(UnavailableFlag):
-                                device_index, bandwidth, waitTime, temp_action = agent.choose_action(observation)
-                                temp_device = env.deviceList[device_index-1]
-                                wait_time = check_node_state(temp_device, observation, task)
-                                if (wait_time < min_wait_time):
-                                    target_action = temp_action
-                                    target_device_index = device_index
-                                    target_bandwidth = bandwidth
-                                    target_waitTime = waitTime
-                                    min_wait_time = wait_time
-                                    UnavailableFlag = False
-                        else:
-                            while(UnavailableFlag):
-                                device_index, bandwidth, waitTime, temp_action = agent.choose_action(observation)
-                                temp_device = env.deviceList[device_index-1]
-                                # TODO 如果采用了随机生成，Temp action要如何处理呢
-                                # 去除time这一列
-                                br, bs_ = unsupervised_learning(auto_model, observation, temp_action, s_dim-1)
-                                # 将 PyTorch 张量转换为 NumPy 数组，并从 2D 数组中提取第一行
-                                bs_values = bs_.detach().numpy().flatten()
-                                # 使用 Pandas 的 map 函数将观测值与新的值关联起来
-                                bs_keys = observation.keys()[1:]
-                                updated_values = dict(zip(bs_keys, bs_values))
-                                # 使用更新后的值创建一个新的 Pandas Series
-                                predict_ob = pd.Series(updated_values)
-                                # 根据 bs_ 创建一个新的 Pandas Series Observation_
-                                # array_bs_ = bs_.detach().numpy()
-                                # index_length = pd.Index(observation)
-                                # array_length = np.repeat(array_bs_, len(index_length))
-                                #
-                                # predict_ob = pd.Series(array_length, index=index_length)
-                                wait_time = check_node_state(temp_device, predict_ob, task)
-                                breward = br.item()
-                                if (breward >= max_reward and wait_time <= min_wait_time):
-                                    target_action = temp_action
-                                    target_device_index = device_index
-                                    target_bandwidth = bandwidth
-                                    target_waitTime = waitTime
-                                    min_wait_time = wait_time
-                                    max_reward = br
-                                    UnavailableFlag = False
-                        action_count = action_count-1
+                    # action_count = 1 # 选择2个动作中最优的一个
+                    # target_action = None
+                    # target_device_index = -1
+                    # target_bandwidth = -1
+                    # target_waitTime = -1
+                    # temp_action = None
+                    # while(action_count):
+                    #     # Action需要满足resource constraints
+                    #     UnavailableFlag = True # True表示 Unavailable
+                    #     if episode < 0:
+                    #         while(UnavailableFlag):
+                    #             device_index, bandwidth, waitTime, temp_action = agent.choose_action(observation)
+                    #             temp_device = env.deviceList[device_index-1]
+                    #             wait_time = check_node_state(temp_device, observation, task)
+                    #             if (wait_time < min_wait_time):
+                    #                 target_action = temp_action
+                    #                 target_device_index = device_index
+                    #                 target_bandwidth = bandwidth
+                    #                 target_waitTime = waitTime
+                    #                 min_wait_time = wait_time
+                    #                 UnavailableFlag = False
+                    #     else:
+                    #         while(UnavailableFlag):
+                    device_index, bandwidth, waitTime, temp_action = agent.choose_action(observation)
+                    target_device_index = device_index
+                    target_bandwidth = bandwidth
+                    target_waitTime = waitTime
+                    target_action = temp_action
+                    temp_device = env.deviceList[device_index-1]
+                    # 这么来看， reward是没有用的，只有wait_time有用，还有bandwidth的waiting time
+                    br, bs_ = unsupervised_learning(transaction_model, reward_model, observation, temp_action, s_dim-1)
+                    # 将 PyTorch 张量转换为 NumPy 数组，并从 2D 数组中提取第一行
+                    bs_values = bs_.detach().numpy().flatten()
+                    # 使用 Pandas 的 map 函数将观测值与新的值关联起来
+                    bs_keys = observation.keys()[1:]
+                    updated_values = dict(zip(bs_keys, bs_values))
+                    # 使用更新后的值创建一个新的 Pandas Series
+                    predict_ob = pd.Series(updated_values)
+                    # 根据 bs_ 创建一个新的 Pandas Series Observation_
+                    # array_bs_ = bs_.detach().numpy()
+                    # index_length = pd.Index(observation)
+                    # array_length = np.repeat(array_bs_, len(index_length))
+                    #
+                    # predict_ob = pd.Series(array_length, index=index_length)
+                    wait_time = check_node_state(temp_device, predict_ob, task)
+                    # TODO 如何根据predicted bandwidth去优化target_bandwidth
+                    # bandwidth = check_link_state(temp_action, predict_ob, task)
+                    target_waitTime = min(wait_time, target_waitTime)
+                    # breward = br.item()
+                    # if (breward >= max_reward and wait_time <= min_wait_time):
+                    #     target_action = temp_action
+                    #     target_device_index = device_index
+                    #     target_bandwidth = bandwidth
+                    #     target_waitTime = waitTime
+                    #     min_wait_time = wait_time
+                    #     max_reward = br
+                    #     UnavailableFlag = False
+                    # action_count = action_count-1
 
                     # 存在问题是max_reward和reward有区别, 如何进行二次模型训练?
                     observation_, reward, done, finishTime = env.step(target_device_index, target_bandwidth, target_waitTime, task, time_step)
@@ -169,27 +174,32 @@ def run_network(env, agent, task_num, auto_model, s_dim):
                     # if (step > 10) and (step % 5 == 0):
                     bs, ba, br, bs_ = agent.learn()
                     bs_ba = np.concatenate((bs[:, 1:], ba), axis=1) # 去除time的一列
-                    br_bs_ = np.concatenate((br, bs_[:, 1:]), axis=1)
                     # Convert the dataset to PyTorch tensors
                     bs_ba_tensor = torch.tensor(bs_ba, dtype=torch.float32)
-                    br_bs_tensor = torch.tensor(br_bs_, dtype=torch.float32)
-                    dataset = TensorDataset(bs_ba_tensor, br_bs_tensor)
-                    # Train the model
+                    bs_tensor = torch.tensor(bs_[:, 1:], dtype=torch.float32)
+                    dataset = TensorDataset(bs_ba_tensor, bs_tensor)
+                    # Train the transaction model
                     epochs = 10
                     batch_size = 64
                     learning_rate = 0.001
-                    train_autoencoder(auto_model, dataset, epochs, batch_size, learning_rate)
-
+                    train_autoencoder(transaction_model, dataset, epochs, batch_size, learning_rate)
+                    # Train the transaction model
+                    epochs = 10
+                    batch_size = 64
+                    learning_rate = 0.001
+                    br_tensor = torch.tensor(br, dtype=torch.float32)
+                    dataset = TensorDataset(bs_tensor, br_tensor)
+                    train_autoencoder(reward_model, dataset, epochs, batch_size, learning_rate)
                     # # Split the dataset into training and validation sets
                     # bs_ba_train, bs_ba_val, br_bs_train, br_bs_val = train_test_split(bs_ba, br_bs_, test_size=0.2, random_state=42)
                     # lr_schedule = keras.optimizers.schedules.ExponentialDecay(
                     #     initial_learning_rate=1e-2,
                     #     decay_steps=10000,
                     #     decay_rate=0.9)
-                    # auto_model.compile(optimizer=keras.optimizers.SGD(learning_rate=lr_schedule), loss='mse')
+                    # transaction_model.compile(optimizer=keras.optimizers.SGD(learning_rate=lr_schedule), loss='mse')
                     # epochs = 1
                     # batch_size = 64
-                    # auto_model.fit(bs_ba_train, br_bs_train, epochs=epochs, batch_size=batch_size, validation_data=(bs_ba_val, br_bs_val))
+                    # transaction_model.fit(bs_ba_train, br_bs_train, epochs=epochs, batch_size=batch_size, validation_data=(bs_ba_val, br_bs_val))
 
                     observation = observation_
 
@@ -221,7 +231,7 @@ def run_network(env, agent, task_num, auto_model, s_dim):
     now = "DDPGTO"
     auto_name = "DTmodels/"+now+".pth"
     # Save the trained model
-    torch.save(auto_model.state_dict(), auto_name)
+    torch.save(transaction_model.state_dict(), auto_name)
     return completion_time_dic, reward_dic
 
 def checkAllocated(taskList):
@@ -335,8 +345,8 @@ if __name__ == "__main__":
     # ali_data = "Rfile/Subtask/subtask100"
     # ali_data = "file/Test/Alibaba_test_data/"
     # ali_data = "Rfile/Bandwidth_test_data"
-    task_file_path = ali_data+"task_info_40.csv"
-    task_pre_path = ali_data+"task_pre_40.csv"
+    task_file_path = ali_data+"task_info_5.csv"
+    task_pre_path = ali_data+"task_pre_5.csv"
     # network_node_path = ali_data+"/network_node_info.csv"
     # network_edge_path = ali_data+"/network_edge_info.csv"
     # device_path = ali_data+"/device_info.csv"
@@ -382,14 +392,35 @@ if __name__ == "__main__":
     # Initialize the autoencoder model
     input_dim = s_dim - 1 + a_dim
     hidden_dim = 128
-    output_dim = s_dim - 1 + 1
-    auto_model = AutoEncoder(input_dim, hidden_dim, output_dim)
+    output_dim = s_dim - 1
+    transaction_model = AutoEncoder(input_dim, hidden_dim, output_dim)
+    r_input_dim = s_dim - 1
+    r_output_dim = 1
+    reward_model = AutoEncoder(r_input_dim, hidden_dim, r_output_dim)
 
-    agent = DDPG(a_dim, s_dim, a_bound, auto_model)
-    run_network(env, agent,task_num, auto_model, s_dim)
+    agent = DDPG(a_dim, s_dim, a_bound, transaction_model)
+
+    import time
+    # 记录开始时间
+    start_time = time.time()
+
+    # 在这里插入需要计时的代码块
+    completion_time_dic, reward_dic = run_network(env, agent,task_num, transaction_model, reward_model, s_dim)
+
+    # 记录结束时间
+    end_time = time.time()
+
+    # 计算执行时间，单位为秒
+    elapsed_time = end_time - start_time
+
+    # 将执行时间转换为小时和分钟，并打印结果
+    hours = int(elapsed_time // 3600)
+    minutes = int((elapsed_time % 3600) // 60)
+    print(f"Execution time: {hours} hours, {minutes} minutes")
+
     # completion_time_dic, reward_dic = run_model(env, agent, task_num)
-    # min_sum = sys.maxsize
-    # plotCompletionTime(completion_time_dic, "completion_time")
-    # plotCompletionTime(reward_dic, "reward")
-    # agent.plot_cost()
+    min_sum = sys.maxsize
+    plotCompletionTime(completion_time_dic, "completion_time")
+    plotCompletionTime(reward_dic, "reward")
+    agent.plot_cost()
     # get TF logger
